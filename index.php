@@ -1,21 +1,22 @@
 <?php
 
-require_once 'simple_pop_cdn.php';
+$config_file = 'config.php';
+
+if (file_exists($config_file))
+{
+    require_once $config_file;
+}
+else
+{
+    die('缺少config.php文件');
+}
+
+require_once 'lib/simple_pop_cdn.php';
 
 
 set_time_limit(0);
 
-//回源地址
-$url = 'https://static.mikuclub.cc';
 
-//主文件夹
-$cache_path = './cache';
+new SimplePOPCDN(ORIGIN_URL, CACHE_PATH, null, CACHE_EXPIRY);
 
-//缓存文件回源请求间隔, 用来确保缓存是正确, 12小时 
-$cache_expire =60 * 60 * 12;
-//$cache_expire = 0;
-
-
-new SimplePOPCDN($url,$cache_path, null, $cache_expire);
-
-
+//在url里添加force参数可以强制刷新
