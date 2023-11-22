@@ -102,8 +102,6 @@ class Simple_PHP_CDN
      * @param string $cache_root_directory 缓存ROOT目录
      * @param string $fix_request_path 如果脚本在子目录中, 需要修正URI路径
      * 
-     * $_REQUEST['ver'] 使用 ver 参数 可以给缓存文件添加版本别名
-     * $_REQUEST['force'] 使用 force 参数 可以强制更新缓存
      */
     function __construct($origin_domain = null, $cache_root_directory = null, $fix_request_path = null)
     {
@@ -170,21 +168,25 @@ class Simple_PHP_CDN
 
     /**
      * 检测缓存是否存在, 以及缓存的有效性
+     * 
+     * $_REQUEST['ver'] 使用 ver 参数 可以给缓存文件添加版本别名
+     * $_REQUEST['force'] 使用 force 参数 可以强制更新缓存
+     * 
      */
     private function check_cache_existence_and_validity()
     {
         //保持原有目录和文件名称
-        $file_base_name = $this->request_basename;
+        $file_name = $this->request_filename;
 
         //如果有ver版本参数
         if (isset($_REQUEST['ver']))
         {
             //添加版本号到文件末端
-            $file_base_name .= '_' . $_REQUEST['ver'];
+            $file_name .= '_' . $_REQUEST['ver'];
         }
 
         //生成完整文件路径
-        $this->full_cache_file_path = $this->cache_root_directory . $this->request_dirname . DIRECTORY_SEPARATOR . $file_base_name;
+        $this->full_cache_file_path = $this->cache_root_directory . $this->request_dirname . DIRECTORY_SEPARATOR . $file_name . '.' . $this->request_extension;
 
         //如果有强制刷新的参数
         if (isset($_REQUEST['force']))
