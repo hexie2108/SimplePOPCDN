@@ -4,10 +4,9 @@
      * 根据后缀名获取 mime type 类型
      *
      * @param string $extension
-     * @param array $array_accepted
      * @return string 
      */
-     function get_mime_type($extension, $array_accepted = array())
+     function get_mime_type($extension)
     {
         $mime_types = array(
             '123' => 'application/vnd.lotus-1-2-3',
@@ -995,16 +994,13 @@
             'jfif' => 'image/jpeg',
         );
 
-        $result = null;
+        $result = '';
 
         if ($extension)
         {
-            //如果没有后缀名限制 或者 后缀名合法
-            if (empty($array_accepted) || in_array($extension, $array_accepted))
-            {
-                // 获取对应mime
-                $result = $mime_types[$extension] ?? 'application/octet-stream';
-            }
+            // 获取对应mime
+            $result = $mime_types[$extension] ?? 'application/octet-stream';
+            // $result = $mime_types[$extension] ?? '';
         }
 
         return $result;
