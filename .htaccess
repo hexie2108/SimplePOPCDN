@@ -2,17 +2,10 @@ RewriteEngine On
 Options -Indexes
 RewriteBase /
 
-#RewriteCond %{HTTP_REFERER} !^$ [NC]
-#RewriteCond %{HTTP_REFERER} !mikuclub.fun [NC]
-#RewriteCond %{HTTP_REFERER} !mikuclub.cc [NC]
-#RewriteCond %{HTTP_REFERER} !mikuclub.eu [NC]
-#RewriteCond %{HTTP_REFERER} !mikuclub.online [NC]
-#RewriteCond %{HTTP_REFERER} !mikuclub.win [NC]
-#RewriteCond %{HTTP_REFERER} !mikuclub.uk [NC]
-#RewriteCond %{HTTP_REFERER} !mikuapp.fun [NC]
-#RewriteCond %{HTTP_REFERER} !localhost [NC]
-#RewriteRule .*\.(gif|jpg|jpeg|png|bmp|webp)$ – [L,R=404]
+# 防盗链
+#RewriteCond %{HTTP_REFERER} !abc.com [NC]
+#RewriteRule ^ - [L,R=404]
 
-
+# 匹配任意文件类型
 RewriteCond %{REQUEST_URI} !^/index.php
 RewriteRule .* index.php [L]
