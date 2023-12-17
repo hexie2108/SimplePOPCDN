@@ -13,10 +13,6 @@ define('CLIENT_CACHE_EXPIRY', 60 * 60 * 24 * 30 * 3);
 
 //默认支持缓存的文件夹路径
 define('ARRAY_ACCEPTED_DIRECTORY', [
-    'wp-includes',
-    'wp-content',
-    'wp-admin',
-    'img',
 ]);
 
 //默认支持缓存的文件
