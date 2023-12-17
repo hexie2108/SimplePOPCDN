@@ -386,6 +386,7 @@ class Simple_PHP_CDN
             header('X-XSS-Protection: 1; mode=block');
             header('Server: Simple CDN');
             header('X-Powered-By: Simple CDN');
+            header("Access-Control-Allow-Origin: *");
 
             readfile($this->full_cache_file_path);
         }

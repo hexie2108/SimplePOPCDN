@@ -1,3 +1,5 @@
+# 初音社CDN 完全静态版, 所有文件只会请求一次
+
 RewriteEngine On
 Options -Indexes
 RewriteBase /
@@ -29,7 +31,7 @@ RewriteCond %{HTTP_REFERER} !mikuclub.win [NC]
 RewriteCond %{HTTP_REFERER} !mikuclub.uk [NC]
 RewriteCond %{HTTP_REFERER} !mikuapp.fun [NC]
 RewriteCond %{HTTP_REFERER} !localhost [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub [NC]
+RewriteCond %{HTTP_REFERER} !html [NC]
 RewriteRule ^ - [L,F]
 
 
@@ -46,12 +48,3 @@ RewriteCond %{REQUEST_FILENAME} !-d [OR]
 RewriteCond %{REQUEST_URI} !\.(jpe?g|png|gif|webp|bmp|jfif|ico|svg|css|js|svg|woff|woff2)$ [NC]
 RewriteCond %{REQUEST_URI} !^/index.php [NC]
 RewriteRule .* index.php [L]
-
-
-
-
-
-
-
-
-
