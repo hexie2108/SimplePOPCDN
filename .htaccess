@@ -14,39 +14,14 @@ RewriteBase /
 </IfModule>
 
 
-
-# 如果没有请求内容 禁止访问
-RewriteCond %{REQUEST_URI} ^/$
-RewriteRule ^ - [L,F]
-
 # 防盗链
 RewriteCond %{HTTP_REFERER} !^$ [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub.fun [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub.cc [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub.eu [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub.online [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub.win [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub.uk [NC]
-RewriteCond %{HTTP_REFERER} !mikuapp.fun [NC]
-RewriteCond %{HTTP_REFERER} !localhost [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub [NC]
+RewriteCond %{HTTP_REFERER} !example.com [NC]
 RewriteRule ^ - [L,F]
 
-
-# 如果是特定文件类型, 并且不是以cache为开头路径, 直接访问cache路径下的对应文件
-RewriteCond %{REQUEST_URI} \.(jpe?g|png|gif|webp|bmp|jfif|ico|svg|css|js|svg|woff|woff2)$ [NC]
-RewriteCond %{REQUEST_URI} !^/cache [NC]
-RewriteRule ^(.*)$ /cache/$1 [L]
-
-
-# 考虑到系统消耗, 设置永不过期的文件类型, 让APACHE直接读取, 避免使用PHP读取文件
-# 不是特定文件类型 或者 文件不存在 或者 目录不存在, 调用index.php处理
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d [OR]
-RewriteCond %{REQUEST_URI} !\.(jpe?g|png|gif|webp|bmp|jfif|ico|svg|css|js|svg|woff|woff2)$ [NC]
-RewriteCond %{REQUEST_URI} !^/index.php [NC]
+# 匹配任意文件类型
+RewriteCond %{REQUEST_URI} !^/index.php
 RewriteRule .* index.php [L]
-
 
 
 
