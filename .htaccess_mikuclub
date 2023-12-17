@@ -1,8 +1,23 @@
-# 初音社CDN旧版
+# 初音社CDN正常版
 
 RewriteEngine On
 Options -Indexes
 RewriteBase /
+
+# 设置静态文件浏览器缓存
+<IfModule mod_expires.c>
+    <IfModule mod_headers.c>
+        <FilesMatch "\.(?i:(?!php).)*$">
+            ExpiresActive On
+            ExpiresDefault "access plus 1 year"
+            Header set Cache-Control "max-age=31536000, public"
+        </FilesMatch>
+    </IfModule>
+</IfModule>
+
+# 如果没有请求内容 禁止访问
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^ - [L,F]
 
 # 防盗链
 RewriteCond %{HTTP_REFERER} !^$ [NC]
@@ -14,7 +29,7 @@ RewriteCond %{HTTP_REFERER} !mikuclub.win [NC]
 RewriteCond %{HTTP_REFERER} !mikuclub.uk [NC]
 RewriteCond %{HTTP_REFERER} !mikuapp.fun [NC]
 RewriteCond %{HTTP_REFERER} !localhost [NC]
-RewriteCond %{HTTP_REFERER} !mikuclub [NC]
+RewriteCond %{HTTP_REFERER} !html [NC]
 RewriteRule ^ - [L,R=404]
 
 # 匹配任意文件类型
