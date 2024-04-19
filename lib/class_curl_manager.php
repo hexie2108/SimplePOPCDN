@@ -57,6 +57,9 @@ class Curl_Manager
             CURLOPT_TIMEOUT => 15,
             CURLOPT_CONNECTTIMEOUT => 10,
 
+            //关闭自动重定向
+            // CURLOPT_FOLLOWLOCATION => false,
+
             //在获取结果的HEAD信息时, 调用回调函数, 储存HEAD信息数组
             CURLOPT_HEADERFUNCTION => function ($curl, $header) use (&$response_header)
             {
@@ -87,10 +90,19 @@ class Curl_Manager
         // var_dump(curl_getinfo($ch));
         // echo '</pre>';
         // exit();
+        // 获取头部信息
 
         //如果未发现错误
         if ($response !== false)
         {
+            // 获取 HTTP 状态码
+            $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            // 如果是302重定向
+            if ($http_status_code === 302)
+            {
+                Error_Manager::send(Error_Manager::HEADER_INTERNAL_SERVER_ERROR, '请求的源文件格式错误');
+            }
+
             $success_callback($response_header);
             //注销ch资源
             curl_close($ch);
@@ -124,7 +136,7 @@ class Curl_Manager
             CURLOPT_HEADER => false,
             //把正文储存到对应的文件中
             // CURLOPT_FILE => $file,
-   
+
             CURLOPT_TIMEOUT => 120,
             CURLOPT_CONNECTTIMEOUT => 10,
         ];
@@ -139,7 +151,7 @@ class Curl_Manager
         if ($response !== false)
         {
             $success_callback($response);
-            
+
             //注销ch资源
             curl_close($ch);
         }

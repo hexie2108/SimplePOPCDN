@@ -324,7 +324,11 @@ class Simple_PHP_CDN
             //获取成功的情况
             function ($response) //use ($file)
             {
-                file_put_contents($this->full_cache_file_path, $response);
+                //内容不为空
+                if ($response)
+                {
+                    file_put_contents($this->full_cache_file_path, $response);
+                }
                 //关闭文件句柄
                 // fclose($file);
                 //解除文件锁定
@@ -388,7 +392,16 @@ class Simple_PHP_CDN
             header('X-Powered-By: Simple CDN');
             header("Access-Control-Allow-Origin: *");
 
-            readfile($this->full_cache_file_path);
+            // 检查文件是否存在
+            if (file_exists($this->full_cache_file_path))
+            {
+                readfile($this->full_cache_file_path);
+            }
+            //如果文件不存在
+            else
+            {
+                echo 'empty';
+            }
         }
     }
 }
