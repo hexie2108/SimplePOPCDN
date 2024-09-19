@@ -35,6 +35,25 @@ class Curl_Manager
 
         ];
 
+        //如果有自定义回源域名IP地址
+        // @phpstan-ignore-next-line
+        if(defined('CUSTOM_ORIGIN_IP') && CUSTOM_ORIGIN_IP !== ''){
+
+            // 解析 回源地址 并提取主机部分
+            $parsed_url = parse_url(ORIGIN_URL);
+            // @phpstan-ignore-next-line
+            $domain = $parsed_url['host'] ?? null;  // 获取主机部分
+
+            $port = defined('CUSTOM_ORIGIN_GATEWAY_PORT') ? CUSTOM_ORIGIN_GATEWAY_PORT : 443;
+
+            //禁用全局DNS服务器
+            $options[CURLOPT_DNS_USE_GLOBAL_CACHE] = false;
+            //自定义解析域名的IP
+            $options[CURLOPT_RESOLVE] = [
+                $domain.':' . $port . ':' . CUSTOM_ORIGIN_IP
+            ];
+        }
+
         return $options;
     }
 

@@ -3,6 +3,12 @@
 //回源地址
 define('ORIGIN_URL', 'https://www.abc.com');
 
+//是否要自定义回源域名IP, 来绕过DNS服务器封锁
+define('CUSTOM_ORIGIN_IP', '');
+
+//默认的回源端口
+define('CUSTOM_ORIGIN_GATEWAY_PORT', 443);
+
 //缓存文件主路径
 define('CACHE_PATH', './cache');
 
