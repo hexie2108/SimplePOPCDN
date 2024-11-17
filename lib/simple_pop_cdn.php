@@ -253,6 +253,10 @@ class Simple_PHP_CDN
             else
             {
                 $this->send_file_request();
+
+                //如果是图片文件 就替换成webp
+                $this->convert_img_to_webp();
+
                 //输出文件, 客户端需要重新加载
                 $this->print_output(false);
             }
@@ -362,6 +366,39 @@ class Simple_PHP_CDN
     }
 
     /**
+     * 把当前储存的图片文件 转换成webp
+     *
+     * @return void
+     */
+    private function convert_img_to_webp()
+    {
+        //如果不是支持的图片文件类型, 结束
+        if (!in_array($this->request_mime_type, [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/bmp',
+        ]))
+        {
+            return;
+        }
+
+        $new_webp_image_path = $this->cache_root_directory . $this->request_dirname . DIRECTORY_SEPARATOR . $this->request_filename . '.' . 'webp';
+
+        //生成webp图片
+        create_webp_file($this->full_cache_file_path, $new_webp_image_path);
+
+        //更新mime type
+        $this->request_mime_type = 'image/webp';
+        
+
+        //删除原始的jpg图片
+        unlink($this->full_cache_file_path);
+        //使用新的webp图片地址
+        $this->full_cache_file_path = $new_webp_image_path;
+    }
+
+    /**
      * 输出文件内容
      *
      * @param bool $not_modified 缓存文件是否有更新
@@ -383,7 +420,7 @@ class Simple_PHP_CDN
             // header('Pragma: public');
             header('Cache-Control: public, max-age=' . CLIENT_CACHE_EXPIRY);
             header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + CLIENT_CACHE_EXPIRY));
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', $this->cache_last_modified_date));
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', $this->cache_last_modified_date ?: time()));
             header('Content-Type: ' . $this->request_mime_type);
             header('Access-Control-Allow-Origin: *');
             header('X-Content-Type-Options: nosniff');
@@ -395,6 +432,8 @@ class Simple_PHP_CDN
             // 检查文件是否存在
             if (file_exists($this->full_cache_file_path))
             {
+                
+                // flush();
                 readfile($this->full_cache_file_path);
             }
             //如果文件不存在

@@ -1,4 +1,4 @@
-# 默认版本
+# 初音社CDN CSS-JS-字体版本
 
 RewriteEngine On
 Options -Indexes
@@ -23,6 +23,7 @@ RewriteBase /
     </FilesMatch>
 </IfModule>
 
+
 # 如果没有请求内容 禁止访问
 RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^ - [L,F]
@@ -40,15 +41,21 @@ RewriteCond %{HTTP_REFERER} !localhost [NC]
 RewriteCond %{HTTP_REFERER} !html [NC]
 RewriteRule ^ - [L,F]
 
-# 匹配任意文件类型
+
+#如果是网站静态文件
+RewriteCond %{REQUEST_URI} \.(css|js|woff|woff2)$ [NC]
+#如果没有CACHE路径
+RewriteCond %{REQUEST_URI} !^/cache [NC]
+#如果带 ver参数
+RewriteCond %{QUERY_STRING} (^|&)ver=([^&]+) [NC]
+#直接重写到对应的文件地址 加上ver后缀
+RewriteRule ^(.*)\.(css|js|woff|woff2)$ /cache/$1_%2.$2 [L]
+
+
+#如果 请求文件不存在
+RewriteCond %{REQUEST_FILENAME} !-f
+#如果 请求路径不是index.php
 RewriteCond %{REQUEST_URI} !^/index.php
 RewriteRule .* index.php [L]
-
-
-
-
-
-
-
 
 

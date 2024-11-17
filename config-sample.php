@@ -17,6 +17,9 @@ define('CACHE_EXPIRY', 60 * 60 * 24);
 //客户端缓存文件过期时间
 define('CLIENT_CACHE_EXPIRY', 60 * 60 * 24 * 30 * 3);
 
+//WEBP图片的压缩质量
+define('WEBP_IMAGE_QUALITY', 90);
+
 //默认支持缓存的文件夹路径
 define('ARRAY_ACCEPTED_DIRECTORY', [
 ]);
