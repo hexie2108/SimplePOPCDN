@@ -44,19 +44,21 @@ RewriteRule ^ - [L,F]
 
 # 常用图片文件转WEBP图片
 # 检查文件类型是否为图片（支持WebP转换的格式）
-RewriteCond %{REQUEST_URI} \.(jpe?g|png|gif|bmp)$ [NC]
+RewriteCond %{REQUEST_URI} \.(jpe?g|png|bmp)$ [NC]
 # 确保请求的路径不是指向 /cache 文件夹
 RewriteCond %{REQUEST_URI} !^/cache [NC]
 # 检查是否存在相应的 WebP 图片
 RewriteCond %{DOCUMENT_ROOT}/cache/$1.webp -f
 # 如果条件匹配，则重写到对应的 .webp 后缀的文件地址
-RewriteRule ^(.*)\.(jpe?g|png|gif|bmp)$ /cache/$1.webp [L]
+RewriteRule ^(.*)\.(jpe?g|png|bmp)$ /cache/$1.webp [L]
 
 
 #如果是网站静态文件
 RewriteCond %{REQUEST_URI} \.(jpe?g|png|gif|webp|jfif|bmp|tif|ico|js|css|svg|otf|ttf|woff|woff2)$ [NC]
 #如果没有CACHE路径
 RewriteCond %{REQUEST_URI} !^/cache [NC]
+#必须没有 force 参数
+RewriteCond %{QUERY_STRING} !(^|&)force= [NC]
 #如果带 ver参数
 RewriteCond %{QUERY_STRING} (^|&)ver=([^&]+) [NC]
 #直接重写到对应的文件地址 (加上ver后缀)
@@ -66,6 +68,10 @@ RewriteRule ^(.*)\.(jpe?g|png|gif|webp|jfif|bmp|tif|ico|js|css|svg|otf|ttf|woff|
 RewriteCond %{REQUEST_URI} \.(jpe?g|png|gif|webp|jfif|bmp|tif|ico|js|css|svg|otf|ttf|woff|woff2)$ [NC]
 #如果没有CACHE路径
 RewriteCond %{REQUEST_URI} !^/cache [NC]
+# 必须没有 force 参数
+RewriteCond %{QUERY_STRING} !(^|&)force= [NC]
+# 没有 ver参数
+RewriteCond %{QUERY_STRING} !(^|&)ver=([^&]+) [NC]
 #直接重写到对应的文件地址 (无ver参数)
 RewriteRule ^(.*)\.(jpe?g|png|gif|webp|jfif|bmp|tif|ico|js|css|svg|otf|ttf|woff|woff2)$ /cache/$1.$2 [L]
 
@@ -76,11 +82,3 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !^/index.php
 RewriteRule .* index.php [L]
 
-
-# 考虑到系统消耗, 设置永不过期的文件类型, 让APACHE直接读取, 避免使用PHP读取文件
-# 不是特定文件类型 或者 文件不存在 或者 目录不存在, 调用index.php处理
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d [OR]
-#RewriteCond %{REQUEST_URI} !\.(jpe?g|png|gif|webp|jfif|bmp|tif|ico|js|css|svg|otf|ttf|woff|woff2)$ [NC]
-#RewriteCond %{REQUEST_URI} !^/index.php [NC]
-#RewriteRule .* index.php [L]

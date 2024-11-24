@@ -41,9 +41,10 @@ function create_webp_file($source_image_path, $new_webp_image_path)
             imagealphablending($image, false);
             imagesavealpha($image, true);
             break;
-        case 'image/gif':
-            $image = imagecreatefromgif($source_image_path);
-            break;
+        // 不支持处理gif动图
+        // case 'image/gif':
+        //     $image = imagecreatefromgif($source_image_path);
+        //     break;
         case 'image/bmp':
             $image = imagecreatefrombmp($source_image_path);
             break;
@@ -69,64 +70,6 @@ function create_webp_file($source_image_path, $new_webp_image_path)
 }
 
 
-
-function convertToWebpGD($source_image_path, $destinationPath, $quality = 80)
-{
-    // 检查源文件是否存在
-    if (!file_exists($source_image_path))
-    {
-        throw new Exception("Source file does not exist: $source_image_path");
-    }
-
-    // 获取图片信息
-    $info = getimagesize($source_image_path);
-    if (!$info)
-    {
-        throw new Exception("Invalid image file: $source_image_path");
-    }
-
-    $mime = $info['mime'];
-
-    // 根据 MIME 类型加载图片
-    switch ($mime)
-    {
-        case 'image/jpeg':
-            $image = imagecreatefromjpeg($source_image_path);
-            break;
-        case 'image/png':
-            $image = imagecreatefrompng($source_image_path);
-            // 处理 PNG 的透明背景
-            imagepalettetotruecolor($image);
-            imagealphablending($image, false);
-            imagesavealpha($image, true);
-            break;
-        case 'image/gif':
-            $image = imagecreatefromgif($source_image_path);
-            break;
-        default:
-            throw new Exception("Unsupported image type: $mime");
-    }
-
-    // 将图片保存为 WebP 格式
-    $success = imagewebp($image, $destinationPath, $quality);
-
-    // 释放内存
-    imagedestroy($image);
-
-    // 检查保存结果
-    if (!$success)
-    {
-        throw new Exception("Failed to save WebP image to $destinationPath");
-    }
-
-    // 返回成功信息
-    return [
-        'status' => true,
-        'message' => 'Conversion successful',
-        'destination' => $destinationPath,
-        'size' => filesize($destinationPath) // 返回转换后文件大小
-    ];
-}
 
 
 /**

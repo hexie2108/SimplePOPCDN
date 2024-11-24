@@ -376,7 +376,7 @@ class Simple_PHP_CDN
         if (!in_array($this->request_mime_type, [
             'image/jpeg',
             'image/png',
-            'image/gif',
+            // 'image/gif',
             'image/bmp',
         ]))
         {
