@@ -422,7 +422,7 @@ class Simple_PHP_CDN
             header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + CLIENT_CACHE_EXPIRY));
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', $this->cache_last_modified_date ?: time()));
             header('Content-Type: ' . $this->request_mime_type);
-            header('Access-Control-Allow-Origin: *');
+            // header('Access-Control-Allow-Origin: *');
             header('X-Content-Type-Options: nosniff');
             header('X-XSS-Protection: 1; mode=block');
             header('Server: Simple CDN');
