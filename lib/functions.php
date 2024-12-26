@@ -65,6 +65,11 @@ function create_webp_file($source_image_path, $new_webp_image_path)
     //如果转换失败
     if (!$result_convert || intval(filesize($new_webp_image_path)) === 0)
     {
+        // 如果创建失败或文件为空，删除文件 
+        if (file_exists($new_webp_image_path))
+        {
+            unlink($new_webp_image_path);
+        }
         throw new Exception("WebP图片创建失败");
     }
 }
