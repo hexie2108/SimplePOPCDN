@@ -13,8 +13,8 @@ function create_webp_file($source_image_path, $new_webp_image_path)
     //从配置里获取压缩质量
     $quality = defined('WEBP_IMAGE_QUALITY') ? WEBP_IMAGE_QUALITY : 90;
 
-    // 检查源文件是否存在
-    if (!file_exists($source_image_path))
+    // 检查源文件是否存在 或者是空文件
+    if (!file_exists($source_image_path) || intval(filesize($source_image_path)) === 0)
     {
         throw new Exception("原图片不存在: $source_image_path");
     }
@@ -41,10 +41,10 @@ function create_webp_file($source_image_path, $new_webp_image_path)
             imagealphablending($image, false);
             imagesavealpha($image, true);
             break;
-        // 不支持处理gif动图
-        // case 'image/gif':
-        //     $image = imagecreatefromgif($source_image_path);
-        //     break;
+            // 不支持处理gif动图
+            // case 'image/gif':
+            //     $image = imagecreatefromgif($source_image_path);
+            //     break;
         case 'image/bmp':
             $image = imagecreatefrombmp($source_image_path);
             break;
@@ -63,7 +63,7 @@ function create_webp_file($source_image_path, $new_webp_image_path)
     imagedestroy($image);
 
     //如果转换失败
-    if (!$result_convert)
+    if (!$result_convert || intval(filesize($new_webp_image_path)) === 0)
     {
         throw new Exception("WebP图片创建失败");
     }
