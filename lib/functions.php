@@ -81,7 +81,7 @@ function create_webp_file($source_image_path, $new_webp_image_path)
     //如果转换失败
     if (!$result_convert || intval(filesize($new_webp_image_path)) === 0)
     {
-        
+
         // 如果创建失败或文件为空，删除文件 
         if (file_exists($new_webp_image_path))
         {
@@ -92,6 +92,52 @@ function create_webp_file($source_image_path, $new_webp_image_path)
 }
 
 
+
+/**
+ * 遍历删除空文件
+ *
+ * @param string $dir
+ * @return void
+ */
+function delete_empty_files($dir)
+{
+    // 检查目录是否存在
+    if (!is_dir($dir))
+    {
+        echo "错误: 目录不存在: $dir\n";
+        return;
+    }
+
+    // 获取目录中的文件和子目录
+    $array_file = scandir($dir);
+
+    // 遍历文件和子目录
+    foreach ($array_file as $file)
+    {
+        // 跳过 "." 和 ".." 这两个特殊目录
+        if ($file === '.' || $file === '..')
+        {
+            continue;
+        }
+
+        // 获取文件的完整路径
+        $file_path = $dir . DIRECTORY_SEPARATOR . $file;
+
+        //如果是文件夹
+        if (is_dir($file_path))
+        {
+            // 递归进入子目录
+            delete_empty_files($file_path);
+        }
+        // 如果是文件且大小为 0 字节，删除文件
+        else if (is_file($file_path) && filesize($file_path) === 0)
+        {
+            // 删除空文件
+            unlink($file_path);
+            echo "已删除空文件: $file_path\n";
+        }
+    }
+}
 
 
 /**

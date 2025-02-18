@@ -1,5 +1,7 @@
 <?php
 
+set_time_limit(0);
+
 $config_file = 'config.php';
 
 if (file_exists($config_file))
@@ -14,10 +16,19 @@ else
 require_once 'lib/simple_pop_cdn.php';
 
 
-set_time_limit(0);
+//如果检测到特殊参数
+if (isset($_REQUEST['delete_empty_files']))
+{
+    //删除缓存目录里的空文件
+    delete_empty_files(CACHE_PATH);
+    echo '已清理缓存空文件';
+}
+else
+{
+    new Simple_PHP_CDN(ORIGIN_URL, CACHE_PATH, null);
+}
 
 
- new Simple_PHP_CDN(ORIGIN_URL, CACHE_PATH, null);
 
 //在url里添加force参数可以强制刷新
 
