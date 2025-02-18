@@ -52,12 +52,25 @@ function create_webp_file($source_image_path, $new_webp_image_path)
             throw new Exception("不支持的图片类型: $mime");
     }
 
+    if (!$image)
+    {
+        throw new Exception("无法加载源图片: $source_image_path");
+    }
+
+    // 清空输出缓冲区
+    if (ob_get_length())
+    {
+        ob_clean();
+    }
 
     // 将图片转换成 WebP 格式, 保存到 $new_webp_image_path 路径
     $result_convert = imagewebp($image, $new_webp_image_path, $quality);
 
-    //确保清空缓存区, 避免污染到后续输出
-    ob_clean();
+    // 清空输出缓冲区
+    if (ob_get_length())
+    {
+        ob_clean();
+    }
 
     // 释放内存
     imagedestroy($image);

@@ -51,8 +51,9 @@ RewriteRule ^ - [L,F]
 RewriteCond %{REQUEST_URI} \.(jpe?g|png|bmp)$ [NC]
 # 确保请求的路径不是指向 /cache 文件夹
 RewriteCond %{REQUEST_URI} !^/cache [NC]
-# 检查是否存在相应的 WebP 图片
+# 检查是否存在相应的 WebP 图片 并且不是空文件
 RewriteCond %{DOCUMENT_ROOT}/cache/$1.webp -f
+RewriteCond %{DOCUMENT_ROOT}/cache/$1.webp -s
 # 如果条件匹配，则重写到对应的 .webp 后缀的文件地址
 RewriteRule ^(.*)\.(jpe?g|png|bmp)$ /cache/$1.webp [L]
 
