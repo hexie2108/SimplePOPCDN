@@ -41,10 +41,10 @@ function create_webp_file($source_image_path, $new_webp_image_path)
             imagealphablending($image, false);
             imagesavealpha($image, true);
             break;
-            // 不支持处理gif动图
-            // case 'image/gif':
-            //     $image = imagecreatefromgif($source_image_path);
-            //     break;
+        // 不支持处理gif动图
+        // case 'image/gif':
+        //     $image = imagecreatefromgif($source_image_path);
+        //     break;
         case 'image/bmp':
             $image = imagecreatefrombmp($source_image_path);
             break;
@@ -135,6 +135,65 @@ function delete_empty_files($dir)
             // 删除空文件
             unlink($file_path);
             echo "已删除空文件: $file_path\n";
+        }
+    }
+}
+
+/**
+ * 遍历删除过期文件
+ *
+ * @param string $dir
+ * @return void
+ */
+function delete_timeout_files($dir)
+{
+    // 检查目录是否存在
+    if (!is_dir($dir))
+    {
+        echo "错误: 目录不存在: $dir\n";
+        return;
+    }
+
+    // 获取目录中的文件和子目录
+    $array_file = scandir($dir);
+
+    // 遍历文件和子目录
+    foreach ($array_file as $file)
+    {
+        // 跳过 "." 和 ".." 这两个特殊目录
+        if ($file === '.' || $file === '..')
+        {
+            continue;
+        }
+
+        // 获取文件的完整路径
+        $file_path = $dir . DIRECTORY_SEPARATOR . $file;
+
+        //如果是文件夹
+        if (is_dir($file_path))
+        {
+            // 递归进入子目录
+            delete_empty_files($file_path);
+        }
+        // 如果是文件
+        else if (is_file($file_path))
+        {
+            // 获取文件的创建时间
+            $creation_time = filectime($file);
+            if ($creation_time !== false)
+            {
+
+                // 当前时间的时间戳
+                $current_time = time();
+                // 计算文件过期时间
+                $expiryTime = $creation_time + CACHE_EXPIRY;
+                // 如果当前时间大于过期时间
+                if ($current_time > $expiryTime)
+                {
+                    unlink($file_path);
+                    echo "已删除过期文件 {$file_path}（超过 " . CACHE_EXPIRY . " 天)\n";
+                }
+            }
         }
     }
 }

@@ -372,6 +372,12 @@ class Simple_PHP_CDN
      */
     private function convert_img_to_webp()
     {
+        //如果没有开启强制webp转换
+        if (!defined('FORCE_CONVERT_JPG_PNG_BMP_TO_WEBP') || !FORCE_CONVERT_JPG_PNG_BMP_TO_WEBP)
+        {
+            return;
+        }
+
         //如果不是支持的图片文件类型, 结束
         if (!in_array($this->request_mime_type, [
             'image/jpeg',
@@ -390,7 +396,7 @@ class Simple_PHP_CDN
 
         //更新mime type
         $this->request_mime_type = 'image/webp';
-        
+
 
         //删除原始的jpg图片
         unlink($this->full_cache_file_path);
@@ -432,7 +438,7 @@ class Simple_PHP_CDN
             // 检查文件是否存在
             if (file_exists($this->full_cache_file_path))
             {
-                
+
                 // flush();
                 readfile($this->full_cache_file_path);
             }

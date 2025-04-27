@@ -23,6 +23,12 @@ if (isset($_REQUEST['delete_empty_files']))
     delete_empty_files(CACHE_PATH);
     echo '已清理缓存空文件';
 }
+else if (isset($_REQUEST['delete_timeout_files']))
+{
+    //删除缓存目录里的过期文件
+    delete_timeout_files(CACHE_PATH);
+    echo '已清理缓存过期的文件';
+}
 else
 {
     new Simple_PHP_CDN(ORIGIN_URL, CACHE_PATH, null);

@@ -17,6 +17,8 @@ define('CACHE_EXPIRY', 60 * 60 * 24);
 //客户端缓存文件过期时间
 define('CLIENT_CACHE_EXPIRY', 60 * 60 * 24 * 30 * 3);
 
+//是否强制把JPG PNG BMP图片转换为WEBP格式
+define('FORCE_CONVERT_JPG_PNG_BMP_TO_WEBP', false);
 //WEBP图片的压缩质量
 define('WEBP_IMAGE_QUALITY', 90);
 
