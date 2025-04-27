@@ -179,7 +179,7 @@ function delete_timeout_files($dir)
         else if (is_file($file_path))
         {
             // 获取文件的创建时间
-            $creation_time = filectime($file);
+            $creation_time = fileatime($file_path);
             if ($creation_time !== false)
             {
 
@@ -191,7 +191,7 @@ function delete_timeout_files($dir)
                 if ($current_time > $expiryTime)
                 {
                     unlink($file_path);
-                    echo "已删除过期文件 {$file_path}（超过 " . CACHE_EXPIRY . " 天)\n";
+                    echo "已删除过期文件 {$file_path} 最后访问时间".date("Y-m-d H:i:s", $creation_time)."\n";
                 }
             }
         }
