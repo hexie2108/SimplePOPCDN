@@ -173,7 +173,7 @@ function delete_timeout_files($dir)
         if (is_dir($file_path))
         {
             // 递归进入子目录
-            delete_empty_files($file_path);
+            delete_timeout_files($file_path);
         }
         // 如果是文件
         else if (is_file($file_path))
